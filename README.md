@@ -1,17 +1,8 @@
-README
---
+Hidden Markov Model
 
-Hidden Markov Model project
-James Waugh
-CMSC 25020
+Details here: https://en.wikipedia.org/wiki/Hidden_Markov_model
 
---
-
-This project contains three files and writes a fourth:
-	* README.txt
-	* hmm.py
-	* english1000.txt
-	* sample.txt
+This is a two-state HMM plus a small English corpus. The goal of the project was to determine which initializations of the model would result in the clustering of consonant and vowel segments. It would have been kind of cool to pretty-print a heat map, but that's for another day.
 
 All of the source code is in hmm.py. It's written in Python 2.6 and is exectuable. Included packages are math, copy, and random, which (to my knowledge) come with the default distribution. Simply run it and follow the prompts. The script will initialize A, B, and Pi as random distributions, and then will allow the user a few options:
  	* To enter a specific word to test the probability computation of the forward and backward algorithms;
