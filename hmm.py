@@ -400,6 +400,31 @@ class HMM():
 				print "Total (equal to number of words O with O_" + t.__str__() + " = " + char +"): " + char_sum.__str__()	
 
 
+	def viterbi_parse(self, word):
+		path = [None for k in range(len(word))]
+		
+		# Keep track of the best guesses
+		max_probability = dict()
+		argmax_state = dict()
+
+		# Keep track of the initial states
+		for state in self.hidden_states:
+			max_probability[(state, 0)] = self.Pi[state] * self.B[(state, word[0])]
+			argmax_state[(state, 0)] = state
+
+		# Moving forward, memoize the probability-maximizing next state given each possible underlying state and the inferred emission probability
+		for i in range(1, len(word)):
+			for state in self.hidden_states:
+				func = lambda k : max_probability[(k, i-1)] * self.A[(k, state)] * self.B[(state, word[i])]
+				max_probability[(state, i)] = max(map(func, self.hidden_states))
+				argmax_state[(state, i)] = max(self.hidden_states, key=func)
+		
+		# Connect the path
+		path[len(word) - 1] = max(self.hidden_states, key=(lambda k : max_probability[(k, len(word) - 1)]))
+		for i in (range(1, len(word))[::-1]):
+			path[i-1] = argmax_state[(path[i], i)]
+		print "Viterbi parse: " + path.__str__()
+
 # Test the probability of a single word
 
 def test_probability(hmm):
@@ -489,7 +514,13 @@ if input_string == "C":
 		print ""
 		print "\n\n--"
 
-	print "HMM terminated after " + i.__str__() + " iterations; total plog = " + plog_sum.__str__()
+	print "HMM terminated after " + i.__str__() + " iterations; total plog = " + plog_sum.__str__() + "\n\n"
+
+	word = raw_input("Enter a word to Viterbi-parse its underlying vocality: ")
+
+	hmm.viterbi_parse(word)
+
+
 if input_string == "Q":
 	# Sample an 8x8 grid of distributions
 
