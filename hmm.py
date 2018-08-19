@@ -472,7 +472,7 @@ hidden_states = [ 0, 1 ]
 
 hmm = HMM(hidden_states, corpus_filename)
 
-print "\n--\n\nType \'T\' to test the probability of a sample word from both directions. Type \'C\' to run through the plogs in the corpus (not advised in verbose mode). Type \'Q\' to sample the unit square in terms of starting distributions for A. This will print the full output in terms of the log ratios of characters in the distribution B to a file \"sample.txt\" and will print out the distribution corresponding to the lowest plog sum."
+print "\n--\n\nType \'T\' to test the probability of a sample word from both directions. Type \'C\' to run through the plogs in the corpus (not advised in verbose mode) and then Viterbi parse user-specified words. Type \'Q\' to sample the unit square in terms of starting distributions for A. This will print the full output in terms of the log ratios of characters in the distribution B to a file \"sample.txt\" and will print out the distribution corresponding to the lowest plog sum."
 input_string = raw_input(">    ")
 if input_string == "T":
 	print "\n--\n\n"
@@ -514,11 +514,11 @@ if input_string == "C":
 		print ""
 		print "\n\n--"
 
-	print "HMM terminated after " + i.__str__() + " iterations; total plog = " + plog_sum.__str__() + "\n\n"
+	print "HMM terminated after " + i.__str__() + " iterations; total plog = " + plog_sum.__str__() + "\n\nThe program will now parse words you enter.\n\n"
 
-	word = raw_input("Enter a word to Viterbi-parse its underlying vocality: ")
-
-	hmm.viterbi_parse(word)
+	while True:
+		word = raw_input("Enter a word to Viterbi-parse its underlying vocality: ")
+		hmm.viterbi_parse(word)
 
 
 if input_string == "Q":
