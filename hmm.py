@@ -2,6 +2,9 @@ import random
 from math import log, fabs
 from copy import deepcopy
 
+import matplotlib
+import matplotlib.pyplot as plt
+
 # Flag variables
 
 # Word-level printing
@@ -528,9 +531,13 @@ if input_string == "Q":
 
 	lowest_plog = 99999999999999999999
 	lowest_cell = (0, 0)
+	highest_plog = 0
 	start_B = deepcopy(hmm.B)
 	start_Pi = deepcopy(hmm.Pi)
 	lowest_B = hmm.B
+
+	plot_labels = [(1/float(16) + float(n) / 8).__str__() for n in range(8)]
+	values = [[0 for j in range(8)] for i in range(8)]
 
 	for i in range(8):
 		for j in range(8):
@@ -541,13 +548,17 @@ if input_string == "Q":
 			hmm.A[0, 0] = (1/float(16)) + i * (1/float(8))
 			hmm.A[0, 1] = 1.0 - hmm.A[0, 0]
 
-			hmm.A[1, 0] = (1/float(16)) + j * (1/float(8))
-			hmm.A[1, 1] = 1.0 - hmm.A[1, 0]
+			hmm.A[1, 1] = (1/float(16)) + j * (1/float(8))
+			hmm.A[1, 0] = 1.0 - hmm.A[1, 0]
 
 			plog_sum = hmm.expectation()
 			delta = plog_sum
 
-			while delta > 0.01:
+			k = 0
+
+			while delta > 0.001 and k < 100:
+				k += 1
+
 				# Run E-M
 				hmm.maximization()
 				new_plog = hmm.expectation()
@@ -568,6 +579,32 @@ if input_string == "Q":
 				lowest_plog = plog_sum
 				lowest_cell = (i, j)
 				lowest_B = hmm.B
+
+			if plog_sum > highest_plog:
+				highest_plog = plog_sum
+
+			values[i][j] = plog_sum
+
+	fig, ax = plt.subplots()
+	im = ax.imshow(values)
+ 
+	ax.set_xticks(range(8))
+	ax.set_yticks(range(8))
+	ax.set_xticklabels(plot_labels)
+	ax.set_yticklabels(plot_labels)
+
+	# Rotate the tick labels and set their alignment.
+	plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+	         rotation_mode="anchor")
+
+	# Loop over data dimensions and create text annotations.
+	for i in range(8):
+	    for j in range(8):
+	        text = ax.text(j, i, values[i][j], ha="center", va="center", color="w")
+
+	ax.set_title("plog values with respect to hmm.A[0, 0] and hmm.A[1, 1] when pi(0) = " + hmm.Pi[0])
+	fig.tight_layout()
+	plt.show()
 
 	print "\n\nLowest plog is " + lowest_plog.__str__() + " found at cell " + lowest_cell.__str__() + "\n"
 	print "Smoothed log emission ratios ((log(B_{l, 0} + 0.001) / (B_{l, 1} + 0.001))):\n"
