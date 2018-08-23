@@ -1,4 +1,4 @@
-Hidden Markov Model
+# Hidden Markov Model
 
 For a walkthrough, see the Jupyter notebook file.
 
