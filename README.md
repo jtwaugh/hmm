@@ -1,6 +1,6 @@
 # Hidden Markov Model
 
-For a walkthrough, see the Jupyter notebook file.
+For a walkthrough and full explanation of the motivation and mathematics, see the Jupyter notebook file.
 
 This is a two-state HMM plus a small English corpus. The goal of the project was to determine which initializations of the model would result in the clustering of consonant and vowel segments. It also tries to print a heat map after sampling the distribution.
 
