@@ -1,4 +1,6 @@
 from hmm import HMM
+from copy import deepcopy
+from math import log, fabs
 import matplotlib
 import matplotlib.pyplot as plt
 

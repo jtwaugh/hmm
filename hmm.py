@@ -1,7 +1,7 @@
 import random
 from distribute import distribute_random, distribute_pi
 from math import log, fabs
-from copy import deepcopy
+
 # Model values
 
 class HMM():

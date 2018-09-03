@@ -1,5 +1,6 @@
 from hmm import HMM
 from math import log, fabs
+from plot_hmm import sample
 
 # Word-level printing
 verbose_flag = False
@@ -105,6 +106,6 @@ while True:
 	if input_string == "T":
 		baum_welch(hmm, 0.001)
 	if input_string == "S":
-		sample(hmm, 4)
+		sample(hmm, 8)
 
 no_terminate = raw_input("\n--\n\nPress enter key to exit.")
